@@ -6,6 +6,8 @@ import Head from 'next/head'
 
 const inter = Inter({ subsets: ['latin'] })
 
+
+
 export async function generateMetadata() {
   return {
     metadataBase: new URL("https://www.salmafreight.com"),
