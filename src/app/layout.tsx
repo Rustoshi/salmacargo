@@ -2,13 +2,11 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import { SiteProvider } from '@/context/SiteContext'
 import { getSiteMetadata } from '@/utils/metadata'
-import Head from 'next/head'
+import { Metadata } from 'next'
 
 const inter = Inter({ subsets: ['latin'] })
 
-
-
-export async function generateMetadata() {
+export async function generateMetadata(): Promise<Metadata> {
   return {
     metadataBase: new URL("https://www.salmafreight.com"),
     title: "Salma Freight - Reliable Shipping Solutions",

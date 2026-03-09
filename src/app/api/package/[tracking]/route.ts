@@ -7,13 +7,13 @@ interface params {
 }
 
 export async function GET(
-    req:NextRequest,
-    _:any,
-    { params }: { params: any }
+    req: NextRequest,
+    { params }: { params: Promise<any> }
 ) {
     try {
+        const resolvedParams = await params;
         await connectDb();
-        const packageItem = await Package.findOne({ trackingID: params.tracking });
+        const packageItem = await Package.findOne({ trackingID: resolvedParams.tracking });
         if (packageItem) {
             return NextResponse.json({ packageItem });
         }
@@ -27,7 +27,7 @@ export async function GET(
 }
 
 export async function PUT(
-    req: NextRequest, { params }: any
+    req: NextRequest, { params }: { params: Promise<any> }
 ) {
     try {
         const _params = await params;
@@ -106,12 +106,13 @@ export async function PUT(
 
 export async function DELETE(
     req: NextRequest,
-    { params }: any
+    { params }: { params: Promise<any> }
 ) {
     try {
+        const resolvedParams = await params;
         await connectDb();
-        const result = await Package.findOneAndDelete({ trackingID: params.tracking });
-        
+        const result = await Package.findOneAndDelete({ trackingID: resolvedParams.tracking });
+
         if (result) {
             return NextResponse.json({ message: 'Package deleted successfully' });
         }

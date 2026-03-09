@@ -3,61 +3,63 @@ import Package from "@/models/package";
 import ShipmentHistory from "@/models/history";
 import { connectDb } from "@/utils";
 
-interface params{
+interface params {
     tracking: string
 }
 
-export async function GET(req:NextRequest,_:any,{params}:{params: any}){
-    try{
+export async function GET(req: NextRequest, { params }: { params: Promise<any> }) {
+    try {
+        const resolvedParams = await params;
         await connectDb();
-        const shipmentHistory = await ShipmentHistory.find({trackingID: params.tracking});
-        if(shipmentHistory){
-            return NextResponse.json({shipmentHistory});
+        const shipmentHistory = await ShipmentHistory.find({ trackingID: resolvedParams.tracking });
+        if (shipmentHistory) {
+            return NextResponse.json({ shipmentHistory });
         }
-        return NextResponse.json({message: 'package not found'}, {status: 404});
-    }catch(error:any){
+        return NextResponse.json({ message: 'package not found' }, { status: 404 });
+    } catch (error: any) {
         console.log(error);
         return NextResponse.json({
             message: 'Internal server error'
-        }, {status: 500});
+        }, { status: 500 });
     }
 }
 
-export async function POST(req:NextRequest, _:any, {params}:{params:any}){
-    try{
+export async function POST(req: NextRequest, { params }: { params: Promise<any> }) {
+    try {
+        const resolvedParams = await params;
         const {
             status,
             notes,
             currentLocation
         } = await req.json();
 
-        if(!status || !notes || !currentLocation){
-            return NextResponse.json({message: 'All fields are required'}, {status: 400});
+        if (!status || !notes || !currentLocation) {
+            return NextResponse.json({ message: 'All fields are required' }, { status: 400 });
         }
         await connectDb();
         const newShipmentHistory = await ShipmentHistory.create({
-            trackingID: params.tracking,
+            trackingID: resolvedParams.tracking,
             status,
             currentLocation,
             notes
         });
 
-        await Package.updateOne({trackingID: params.tracking}, {
+        await Package.updateOne({ trackingID: resolvedParams.tracking }, {
             status
         });
 
-        return NextResponse.json({newShipmentHistory});
-    }catch(error:any){
+        return NextResponse.json({ newShipmentHistory });
+    } catch (error: any) {
         console.log(error);
         return NextResponse.json({
             message: 'Internal server error'
-        }, {status: 500})
+        }, { status: 500 })
     }
 }
 
 
-export async function PUT(req:NextRequest){
-    try{
+export async function PUT(req: NextRequest) {
+    try {
         const {
             id,
             status,
@@ -66,32 +68,33 @@ export async function PUT(req:NextRequest){
         } = await req.json();
         await connectDb();
         const shipmentHistory = await ShipmentHistory.findById(id);
-        if(shipmentHistory){
+        if (shipmentHistory) {
             shipmentHistory.status = status;
             shipmentHistory.notes = notes;
             shipmentHistory.currentLocation = currentLocation;
             await shipmentHistory.save();
-            return NextResponse.json({shipmentHistory});
+            return NextResponse.json({ shipmentHistory });
         }
-        return NextResponse.json({message: 'history not found'}, {status: 404});
-    }catch(error:any){
+        return NextResponse.json({ message: 'history not found' }, { status: 404 });
+    } catch (error: any) {
         console.log(error);
         return NextResponse.json({
             message: 'Internal server error'
-        }, {status: 500})
+        }, { status: 500 })
     }
 }
 
-export async function DELETE(req:NextRequest, { params }: any){
-    try{
+export async function DELETE(req: NextRequest, { params }: { params: Promise<any> }) {
+    try {
+        const resolvedParams = await params;
         await connectDb();
-        await ShipmentHistory.findOneAndDelete({_id: params.tracking});
-        return NextResponse.json({message:"history delete successfully"});
+        await ShipmentHistory.findOneAndDelete({ _id: resolvedParams.tracking });
+        return NextResponse.json({ message: "history delete successfully" });
     }
-    catch(error:any){
+    catch (error: any) {
         console.log(error);
         return NextResponse.json({
             message: 'Internal server error'
-        }, {status: 500})   
+        }, { status: 500 })
     }
 }
