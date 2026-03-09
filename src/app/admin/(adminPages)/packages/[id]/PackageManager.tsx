@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { Save, ArrowLeft, Trash2 } from 'lucide-react';
 import { IPackage, IShipmentHistory } from '@/types/models';
@@ -34,31 +34,7 @@ export default function PackageManager({ id }: { id: string }) {
     expectedDeliveryDate: ''
   });
 
-  useEffect(() => {
-    fetchPackage();
-  }, []);
-
-  useEffect(() => {
-    if (packageData) {
-      setPackageForm({
-        senderName: packageData.senderName || '',
-        senderEmail: packageData.senderEmail || '',
-        senderPhone: packageData.senderPhone || '',
-        originAddress: packageData.originAddress || '',
-        receiverName: packageData.receiverName || '',
-        receiverEmail: packageData.receiverEmail || '',
-        receiverPhone: packageData.receiverPhone || '',
-        destinationAddress: packageData.destinationAddress || '',
-        weight: packageData.weight || '',
-        freight: packageData.freight || '',
-        charges: packageData.charges?.toString() || '',
-        description: packageData.description || '',
-        expectedDeliveryDate: packageData.expectedDeliveryDate ? new Date(packageData.expectedDeliveryDate).toISOString().split('T')[0] : ''
-      });
-    }
-  }, [packageData]);
-
-  const fetchPackage = async () => {
+  const fetchPackage = useCallback(async () => {
     try {
       setLoading(true);
       const response = await fetch(`/api/package/track?id=${encodeURIComponent(id)}`);
@@ -88,7 +64,11 @@ export default function PackageManager({ id }: { id: string }) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id]);
+
+  useEffect(() => {
+    fetchPackage();
+  }, [fetchPackage]);
 
   const handleStatusSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -226,7 +206,7 @@ export default function PackageManager({ id }: { id: string }) {
 
       setSuccess('Package deleted successfully. Redirecting...');
       setTimeout(() => {
-        router.push('/admin/packages'); 
+        router.push('/admin/packages');
       }, 2000);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to delete package');

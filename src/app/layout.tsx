@@ -8,6 +8,7 @@ const inter = Inter({ subsets: ['latin'] })
 
 export async function generateMetadata() {
   return {
+    metadataBase: new URL("https://www.salmafreight.com"),
     title: "Salma Freight - Reliable Shipping Solutions",
     description: "Efficient and secure cargo shipping services tailored to your needs. Experience hassle-free logistics with Salma Freight.",
     openGraph: {

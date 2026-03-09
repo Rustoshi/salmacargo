@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { IPackage } from '@/types/models';
 import { Plus, Search, ChevronLeft, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
@@ -13,11 +13,7 @@ export default function PackagesPage() {
   const [totalPages, setTotalPages] = useState(1);
   const itemsPerPage = 10;
 
-  useEffect(() => {
-    fetchPackages();
-  }, [currentPage]);
-
-  const fetchPackages = async () => {
+  const fetchPackages = useCallback(async () => {
     try {
       setLoading(true);
       const response = await fetch(`/api/package?page=${currentPage}&limit=${itemsPerPage}`);
@@ -32,7 +28,11 @@ export default function PackagesPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [currentPage, itemsPerPage]);
+
+  useEffect(() => {
+    fetchPackages();
+  }, [fetchPackages]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -79,7 +79,7 @@ export default function PackagesPage() {
       {/* Header with search and create button */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <h1 className="text-2xl font-semibold text-gray-900">All Packages</h1>
-        
+
         <div className="flex items-center gap-4 w-full sm:w-auto">
           <form onSubmit={handleSearch} className="flex-1 sm:flex-none">
             <div className="relative">
@@ -134,7 +134,7 @@ export default function PackagesPage() {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {filteredPackages.map((pkg:any) => (
+              {filteredPackages.map((pkg: any) => (
                 <tr key={pkg.trackingID} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600">
                     {pkg.trackingID}
