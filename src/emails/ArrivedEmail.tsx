@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Html, Head, Preview, Body, Container, Section, Text, Link, Img } from "@react-email/components";
+import { Html, Head, Preview, Body, Container, Section, Text, Link } from "@react-email/components";
 
 export default function ArrivedEmail({ name, trackingNumber }: { name: string; trackingNumber: string }) {
   return (
@@ -15,17 +15,17 @@ export default function ArrivedEmail({ name, trackingNumber }: { name: string; t
             <Text style={styles.tracking}>
               📍 <strong>{trackingNumber}</strong>
             </Text>
-            <Link href={`https://www.salmacargo.com/tracking/${trackingNumber}`} style={styles.button}>
+            <Link href={`https://www.salmafreight.com/tracking/${trackingNumber}`} style={styles.button}>
               View Pickup Details
             </Link>
-            <Text>Thank you for choosing Salma Cargo.</Text>
+            <Text>Thank you for choosing Salma Freight.</Text>
             <Text style={styles.supportMessage}>
               If you have any questions or need help, please email us at{" "}
-              <Link href="mailto:info@salmacargo.com" style={{ color: "#007bff", textDecoration: "none" }}>
-                info@salmacargo.com
+              <Link href="mailto:info@salmafreight.com" style={{ color: "#007bff", textDecoration: "none" }}>
+                info@salmafreight.com
               </Link>{" "}
               or chat with our customer support on our{" "}
-              <Link href="https://www.salmacargo.com" style={{ color: "#007bff", textDecoration: "none" }}>
+              <Link href="https://www.salmafreight.com" style={{ color: "#007bff", textDecoration: "none" }}>
                 website
               </Link>.
             </Text>

@@ -13,7 +13,7 @@ export default function CancelledEmail({ name, trackingNumber }: { name: string;
             <Text>Hello {name},</Text>
             <Text>Unfortunately, your package delivery has been cancelled. If this was unexpected, please contact support.</Text>
             <Text style={styles.tracking}>📍 <strong>{trackingNumber}</strong></Text>
-            <Text>Thank you for choosing Salma Cargo.</Text>
+            <Text>Thank you for choosing Salma Freight.</Text>
           </Section>
         </Container>
       </Body>

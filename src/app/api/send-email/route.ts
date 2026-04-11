@@ -4,6 +4,8 @@ import axios from "axios";
 import ShippedEmail from "@/emails/ShippedEmail";
 import ArrivedEmail from "@/emails/ArrivedEmail";
 import CancelledEmail from "@/emails/CancelledEmail";
+import DamagedEmail from "@/emails/DamagedEmail";
+import OnHoldEmail from "@/emails/OnHoldEmail";
 
 export async function POST(req: Request) {
   try {
@@ -13,13 +15,21 @@ export async function POST(req: Request) {
     let subject;
 
     switch (type) {
-      case "shipped":
+      case "in transit":
         EmailComponent = ShippedEmail;
         subject = "📦 Your Package Has Been Shipped!";
         break;
-      case "arrived":
+      case "delivered":
         EmailComponent = ArrivedEmail;
         subject = "✅ Your Package Has Arrived!";
+        break;
+      case "on hold":
+        EmailComponent = OnHoldEmail;
+        subject = "📦 Your Package Is On Hold";
+        break;
+      case "damaged":
+        EmailComponent = DamagedEmail;
+        subject = "❌ Your Package Was Damaged";
         break;
       case "cancelled":
         EmailComponent = CancelledEmail;
