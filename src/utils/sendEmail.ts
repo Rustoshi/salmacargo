@@ -41,7 +41,7 @@ export async function sendEmail({ email, name, type, trackingNumber, pdfBuffer }
     const html = await render(EmailComponent({ name, trackingNumber }));
 
     const payload: any = {
-      from: "Salma Cargo <noreply@salmacargo.com>",
+      from: "Salma Freight <noreply@salmafreight.com>",
       to: [email],
       subject,
       html,
@@ -52,14 +52,13 @@ export async function sendEmail({ email, name, type, trackingNumber, pdfBuffer }
         {
           filename: `Shipment_Receipt_${trackingNumber}.pdf`,
           content: pdfBuffer.toString("base64"),
-          contentType: "application/pdf",
         }
       ];
     }
 
-    const response = await axios.post("https://www.unosend.co/api/v1/emails", payload, {
+    const response = await axios.post("https://api.resend.com/emails", payload, {
       headers: {
-        Authorization: `Bearer ${process.env.UNOSEND_API_KEY}`,
+        Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
         "Content-Type": "application/json",
       },
     });

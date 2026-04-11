@@ -31,14 +31,14 @@ export async function POST(req: Request) {
 
     const html = await render(EmailComponent({ name, trackingNumber }));
 
-    const response = await axios.post("https://www.unosend.co/api/v1/emails", {
-      from: "Salma Cargo <noreply@salmacargo.com>",
+    const response = await axios.post("https://api.resend.com/emails", {
+      from: "Salma Freight <noreply@salmafreight.com>",
       to: [email],
       subject,
       html,
     }, {
       headers: {
-        Authorization: `Bearer ${process.env.UNOSEND_API_KEY}`,
+        Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
         "Content-Type": "application/json",
       },
     });
